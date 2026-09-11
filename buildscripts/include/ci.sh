@@ -28,9 +28,6 @@ fetch_prefix() {
 build_prefix() {
 	msg "Building the prefix ($ci_tarball)..."
 
-	msg "Fetching deps"
-	IN_CI=1 ./include/download-deps.sh
-
 	msg "Compiling"
 	./buildall.sh --arch arm64 --only-deps mpv
 
@@ -58,6 +55,9 @@ elif [ "$1" = "install" ]; then
 
 	msg "Fetching SDK + NDK"
 	IN_CI=1 ./include/download-sdk.sh
+
+	msg "Fetching pinned source dependencies"
+	IN_CI=1 ./include/download-deps.sh
 
 	msg "Trying to fetch existing prefix"
 	mkdir -p prefix

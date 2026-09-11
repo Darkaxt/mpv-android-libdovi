@@ -6,8 +6,8 @@
 v_sdk=11076708_latest
 v_ndk=r29
 v_ndk_n=29.0.14206865
-v_sdk_platform=35
-v_sdk_build_tools=35.0.0
+v_sdk_platform=36
+v_sdk_build_tools=36.0.0
 
 v_lua=5.2.4
 v_unibreak=7.0
@@ -21,6 +21,23 @@ v_fontconfig=2.17.1
 # the relevant API is pl_hdr_metadata_from_dovi_rpu / pl_shader_dovi_reshape
 # which has been stable since libplacebo 6.x and libdovi 3.x.
 v_libdovi=3.3.2
+
+# Git dependencies are pinned to immutable commits. Keep the human-readable
+# release/tag next to the verified commit where one exists.
+v_dav1d=1.5.4
+r_dav1d=54706fc6bc0cdecab7e9593974a4039cc038fca7
+v_ffmpeg=n8.1.1
+r_ffmpeg=239f2c733de417201d7ad3b3b8b0d9b63285b2b1
+v_libass=0.17.5
+r_libass=4a05d8127f525943ebf45fdc6497c9e665947f0d
+r_libplacebo=3330a515d62139259c26239014f286e233bd3a5c
+r_libplacebo_pink_fix=c93aa134ab62365ce1177efff99b8e1e66a818e7
+r_mpv=14f2d48cbc7dda61adb4bd181e107a1f3f76e533
+
+# Host build tools required by the libdovi and current Meson projects.
+v_rust=1.98.1
+v_cargo_c=0.10.25
+v_meson=1.12.0
 
 
 ## Dependency tree
@@ -44,8 +61,5 @@ dep_mpv_android=(mpv)
 
 ## for CI workflow
 
-# pinned ffmpeg revision
-v_ci_ffmpeg=n8.1.1
-
 # filename used to uniquely identify a build prefix
-ci_tarball="prefix-ndk-${v_ndk}-lua-${v_lua}-unibreak-${v_unibreak}-harfbuzz-${v_harfbuzz}-fribidi-${v_fribidi}-freetype-${v_freetype}-libxml2-${v_libxml2}-fontconfig-${v_fontconfig}-mbedtls-${v_mbedtls}-ffmpeg-${v_ci_ffmpeg}.tgz"
+ci_tarball="prefix-arm64-sdk-${v_sdk_platform}-build-tools-${v_sdk_build_tools}-ndk-${v_ndk}-rust-${v_rust}-cargo-c-${v_cargo_c}-meson-${v_meson}-lua-${v_lua}-unibreak-${v_unibreak}-harfbuzz-${v_harfbuzz}-fribidi-${v_fribidi}-freetype-${v_freetype}-libxml2-${v_libxml2}-fontconfig-${v_fontconfig}-mbedtls-${v_mbedtls}-libdovi-${v_libdovi}-dav1d-${r_dav1d}-ffmpeg-${r_ffmpeg}-libass-${r_libass}-libplacebo-${r_libplacebo}-pink-fix-${r_libplacebo_pink_fix}-mpv-${r_mpv}.tgz"

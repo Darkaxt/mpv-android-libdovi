@@ -7,6 +7,35 @@
 
 mkdir -p deps && cd deps
 
+clone_revision() {
+	local url="$1"
+	local directory="$2"
+	local revision="$3"
+	local expected="$4"
+
+	if [ -d "$directory" ]; then
+		local actual
+		actual=$(git -C "$directory" rev-parse HEAD 2>/dev/null || true)
+		if [ "$actual" != "$expected" ]; then
+			echo "Existing $directory is at $actual, expected $expected; remove it before rebuilding." >&2
+			exit 1
+		fi
+		return
+	fi
+
+	git init --quiet "$directory"
+	git -C "$directory" remote add origin "$url"
+	git -C "$directory" fetch --quiet --depth=1 origin "$revision"
+	local actual
+	actual=$(git -C "$directory" rev-parse 'FETCH_HEAD^{commit}')
+	if [ "$actual" != "$expected" ]; then
+		echo "Fetched $directory revision $actual, expected $expected." >&2
+		exit 1
+	fi
+	git -C "$directory" checkout --quiet --detach FETCH_HEAD
+	git -C "$directory" submodule update --init --recursive --depth=1
+}
+
 # mbedtls
 if [ ! -d mbedtls ]; then
 	mkdir mbedtls
@@ -15,14 +44,10 @@ if [ ! -d mbedtls ]; then
 fi
 
 # dav1d
-[ ! -d dav1d ] && git clone https://github.com/videolan/dav1d
+clone_revision https://github.com/videolan/dav1d dav1d "$v_dav1d" "$r_dav1d"
 
 # ffmpeg
-if [ ! -d ffmpeg ]; then
-	args=()
-	[ $IN_CI -eq 1 ] && args+=(--depth=1 -b "$v_ci_ffmpeg")
-	git clone https://github.com/FFmpeg/FFmpeg ffmpeg "${args[@]}"
-fi
+clone_revision https://github.com/FFmpeg/FFmpeg ffmpeg "$v_ffmpeg" "$r_ffmpeg"
 
 # freetype2
 [ ! -d freetype2 ] && git clone --recurse-submodules https://gitlab.freedesktop.org/freetype/freetype.git freetype2 -b VER-${v_freetype//./-}
@@ -63,7 +88,7 @@ if [ ! -d fontconfig ]; then
 fi
 
 # libass
-[ ! -d libass ] && git clone https://github.com/libass/libass
+clone_revision https://github.com/libass/libass libass "$v_libass" "$r_libass"
 
 # lua
 if [ ! -d lua ]; then
@@ -82,9 +107,15 @@ if [ ! -d libdovi ]; then
 fi
 
 # libplacebo
-[ ! -d libplacebo ] && git clone --recursive https://github.com/haasn/libplacebo
+clone_revision https://github.com/haasn/libplacebo libplacebo "$r_libplacebo" "$r_libplacebo"
+git -C libplacebo fetch --quiet --depth=256 origin "$r_libplacebo"
+if ! git -C libplacebo merge-base --is-ancestor \
+	"$r_libplacebo_pink_fix" "$r_libplacebo"; then
+	echo "Pinned libplacebo revision does not contain the required pink-screen fix" >&2
+	exit 1
+fi
 
 # mpv
-[ ! -d mpv ] && git clone https://github.com/mpv-player/mpv
+clone_revision https://github.com/mpv-player/mpv mpv "$r_mpv" "$r_mpv"
 
 cd ..

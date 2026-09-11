@@ -59,7 +59,8 @@ Acceptance criteria satisfied:
 - Public workflow run
   [34651320046](https://github.com/Darkaxt/mpv-android-libdovi/actions/runs/34651320046)
   passed at commit `0b6a253` and uploaded artifact
-  `mpv-android-libdovi-arm64`.
+  `mpv-android-libdovi-arm64`. That wrapper artifact was superseded by the
+  corrected Stage 4 artifact.
 - The downloaded public artifact was independently checked for the expected
   API classes, AArch64 `libmpv.so`, and the libdovi RPU parser symbol.
 
@@ -69,18 +70,9 @@ Blockers: none.
 
 Tracked deferrals: none.
 
-## Final reconciliation
-
-Blockers: 1
-Tracked deferrals: 0
-
-The first integration attempt against current NuvioMobile proved that the
-wrapper imported for Stage 2 did not match the API of the published Maven
-`0.1.12` artifact. Final reconciliation is reopened until Stage 4 closes.
-
 ## Stage 4 - Published 0.1.12 API correction
 
-Status: **ACTIVE**
+Status: **COMPLETE**
 
 Requirements: R1, R2, R6
 
@@ -93,12 +85,28 @@ Acceptance criteria satisfied:
 - The corrected wrapper AAR passes the compile-only compatibility consumer.
 - Current NuvioMobile Android sources compile against the corrected wrapper
   without player call-site changes.
+- Public workflow run
+  [34656988140](https://github.com/Darkaxt/mpv-android-libdovi/actions/runs/34656988140)
+  passed at corrected source commit
+  `a6d4de8b2109347e07dcd2daef258deee9a97e29` and uploaded artifact
+  `mpv-android-libdovi-arm64`.
+- The downloaded public AAR has SHA-256
+  `B266C9F5ED940B761DA572F1496FCF2152FE624CDFD42354B33BA5C9E3FC8721`;
+  its wrapper bytecode matches the published `0.1.12` API, its only native ABI
+  is ARM64, and its `libmpv.so` is AArch64 and exports `dovi_parse_rpu`.
+- The exact public AAR is integrated into NuvioMobile and a full Android debug
+  APK builds successfully against it.
 
-Acceptance criteria remaining:
+Acceptance criteria remaining: none.
 
-- Publish a successful public workflow artifact at the corrected commit.
-
-Blockers: the current public AAR is not source-compatible with NuvioMobile.
-Resolution condition: all remaining Stage 4 criteria above pass.
+Blockers: none.
 
 Tracked deferrals: none.
+
+## Final reconciliation
+
+Requirements R1-R7: satisfied and verified.
+
+Blockers: 0
+
+Tracked deferrals: 0

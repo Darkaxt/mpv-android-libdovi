@@ -48,13 +48,32 @@ Tracked deferrals: none.
 
 ## Stage 3 - Public CI and fork documentation
 
-Status: **ACTIVE**
+Status: **COMPLETE**
 
 Requirements: R6, R7
 
-Required evidence: successful public workflow run and README reconciliation.
+Acceptance criteria satisfied:
+
+- The README documents the personal-fork scope, the two independent playback
+  improvements, limitations, provenance, consumption, and deprecation policy.
+- Public workflow run
+  [34651320046](https://github.com/Darkaxt/mpv-android-libdovi/actions/runs/34651320046)
+  passed at commit `0b6a253` and uploaded artifact
+  `mpv-android-libdovi-arm64`.
+- The downloaded public artifact was independently checked for the expected
+  API classes, AArch64 `libmpv.so`, and the libdovi RPU parser symbol.
+
+Acceptance criteria remaining: none.
+
+Blockers: none.
+
+Tracked deferrals: none.
 
 ## Final reconciliation
 
 Blockers: 0
 Tracked deferrals: 0
+
+All requirements and acceptance criteria in the authoritative specification
+are satisfied. Device playback and Nuvio source integration remain outside
+this fork's completed scope.

@@ -82,7 +82,7 @@ msg "Building mpv-android"
 ./buildall.sh --arch arm64 -n
 
 msg "Checking Nuvio-compatible AAR API"
-ANDROID_HOME="$PWD/sdk/android-sdk-linux" ../gradlew \
+ANDROID_HOME="$PWD/sdk/android-sdk-linux" ../gradlew -p .. \
 	:compatcheck:compileDebugKotlin --no-daemon
 
 exit 0

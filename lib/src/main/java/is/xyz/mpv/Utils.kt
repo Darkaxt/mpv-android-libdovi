@@ -19,16 +19,9 @@ import android.view.ViewGroup
 import androidx.core.os.BundleCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import java.io.*
 import kotlin.math.abs
 
-@Suppress("unused")
 object Utils {
     private fun copyAssetFile(assetManager: AssetManager, filename: String, outFile: File): Boolean {
         var ins: InputStream? = null
@@ -123,7 +116,7 @@ object Utils {
 
         val candidates = mutableListOf<String>()
         // check all media dirs, there's usually one on each storage volume
-        context.getExternalFilesDirs(null).forEach {
+        context.externalMediaDirs.forEach {
             if (it != null)
                 candidates.add(it.absolutePath)
         }
@@ -202,10 +195,10 @@ object Utils {
     }
 
     fun visibleChildren(view: View): Int {
-        if (view is ViewGroup && view.isVisible) {
+        if (view is ViewGroup && view.visibility == View.VISIBLE) {
             return (0 until view.childCount).sumOf { visibleChildren(view.getChildAt(it)) }
         }
-        return if (view.isVisible) 1 else 0
+        return if (view.visibility == View.VISIBLE) 1 else 0
     }
 
     class AudioMetadata {
@@ -279,14 +272,19 @@ object Utils {
      * (if using an action bar).
      */
     fun handleInsetsAsPadding(view: View) {
-        val orig = listOf(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom)
+        data class Padding(val left: Int, val top: Int, val right: Int, val bottom: Int)
+        var originalPadding: Padding? = null
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, insets ->
             val i = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // yes, really
+            if (originalPadding == null)
+                originalPadding = Padding(view.paddingLeft, view.paddingTop, view.paddingRight, view.paddingBottom)
+            val orig = originalPadding!!
             view.setPadding(
-                orig[0] + i.left,
-                orig[1] + i.top,
-                orig[2] + i.right,
-                orig[3] + i.bottom
+                orig.left + i.left,
+                orig.top + i.top,
+                orig.right + i.right,
+                orig.bottom + i.bottom
             )
             insets
         }
@@ -324,6 +322,7 @@ object Utils {
             "jpe", "jpeg", "jpg", "jpg2", "png", "qoi", "tga", "tif", "tiff", "webp",
     )
 
+    // cf. AndroidManifest.xml and MPVActivity.resolveUri()
     val PROTOCOLS = setOf(
         "file", "content", "http", "https", "data", "ftp",
         "rtmp", "rtmps", "rtp", "rtsp", "mms", "mmst", "mmsh", "tcp", "udp", "lavf"
@@ -337,9 +336,9 @@ object Utils {
     )
 
     val VERSIONS = Versions(
-        mpv = "%MPV_VERSION%",
-        buildDate = "%DATE%",
-        libPlacebo = "%LIBPLACEBO_VERSION%",
-        ffmpeg = "%FFMPEG_VERSION%",
+        mpv = "v0.41.0-174-g76a5eba99",
+        buildDate = "4(",
+        libPlacebo = "v7.360.0 (v7.360.0)",
+        ffmpeg = "a7522f3fef",
     )
 }

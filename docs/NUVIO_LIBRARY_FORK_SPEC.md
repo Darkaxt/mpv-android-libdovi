@@ -14,9 +14,10 @@ retired when the relevant upstream projects cover them.
 
 - **R1 - Compatible library API:** Produce an AAR exposing the same
   `is.xyz.mpv.MPV`, `is.xyz.mpv.MPVNode`, and `is.xyz.mpv.BaseMPVView` API used
-  by `io.github.abdallahmehiz:mpv-android-lib:0.1.12`. The compatible wrapper
-  source comes from `abdallahmehiz/mpv-android` commit
-  `18e41158e1ad24c1819598be15f51c898397e04f`.
+  by the published `io.github.abdallahmehiz:mpv-android-lib:0.1.12` artifact.
+  The wrapper source must match Maven Central's
+  `mpv-android-lib-0.1.12-sources.jar`, whose SHA-256 is
+  `FB2D8954E32B9A671FEA4A936D5E7C1F8D733256DFBA7B88F836CEF0DB336D36`.
 - **R2 - ARM64 native payload:** The AAR must contain the ARM64 libmpv JNI
   bridge and every non-platform shared library required by that bridge.
 - **R3 - Dolby Vision path:** The native stack must build libdovi 3.3.2,
@@ -52,8 +53,9 @@ retired when the relevant upstream projects cover them.
 3. The release AAR contains the expected `is.xyz.mpv` classes, `libplayer.so`,
    `libmpv.so`, FFmpeg shared libraries, and `libc++_shared.so` under
    `jni/arm64-v8a/`.
-4. A compile-only compatibility consumer extending `BaseMPVView` and using its
-   `mpv` property builds against the produced AAR.
+4. A compile-only compatibility consumer using the published `0.1.12`
+   `BaseMPVView` lifecycle hooks and `MPV()` API builds against the produced
+   AAR.
 5. The public fork's workflow succeeds at the committed revision and exposes
    the AAR as a downloadable artifact.
 6. No required blocker or tracked deferral remains within this specification.

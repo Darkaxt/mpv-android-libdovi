@@ -71,9 +71,34 @@ Tracked deferrals: none.
 
 ## Final reconciliation
 
-Blockers: 0
+Blockers: 1
 Tracked deferrals: 0
 
-All requirements and acceptance criteria in the authoritative specification
-are satisfied. Device playback and Nuvio source integration remain outside
-this fork's completed scope.
+The first integration attempt against current NuvioMobile proved that the
+wrapper imported for Stage 2 did not match the API of the published Maven
+`0.1.12` artifact. Final reconciliation is reopened until Stage 4 closes.
+
+## Stage 4 - Published 0.1.12 API correction
+
+Status: **ACTIVE**
+
+Requirements: R1, R2, R6
+
+Acceptance criteria satisfied:
+
+- Maven Central's official `0.1.12` AAR and sources archive were retrieved and
+  compared with the first fork artifact.
+- The mismatch was isolated to the wrapper API: the native JNI bridge already
+  exposes the instance lifecycle required by the published source.
+- The corrected wrapper AAR passes the compile-only compatibility consumer.
+- Current NuvioMobile Android sources compile against the corrected wrapper
+  without player call-site changes.
+
+Acceptance criteria remaining:
+
+- Publish a successful public workflow artifact at the corrected commit.
+
+Blockers: the current public AAR is not source-compatible with NuvioMobile.
+Resolution condition: all remaining Stage 4 criteria above pass.
+
+Tracked deferrals: none.

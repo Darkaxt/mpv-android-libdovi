@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "io.github.darkaxt"
-version = "0.1.12-darkaxt.1"
+version = "0.1.12-darkaxt.2"
 
 android {
     namespace = "is.xyz.mpv"

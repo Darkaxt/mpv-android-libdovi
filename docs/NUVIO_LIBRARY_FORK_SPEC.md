@@ -59,3 +59,28 @@ retired when the relevant upstream projects cover them.
 5. The public fork's workflow succeeds at the committed revision and exposes
    the AAR as a downloadable artifact.
 6. No required blocker or tracked deferral remains within this specification.
+
+## 2026-11-08 Android mpv update
+
+Direct user authorization: update the Android mpv version for consumption by
+Nuvio. The cross-repository execution ledger is
+`D:\Projects\mpv\DOCS\NUVIODV_WINDOWS_RUNTIME_SPEC.md`; Android native qualification
+is its single ACTIVE stage. This library specification's R1-R7 remain binding.
+
+Advance mpv from `14f2d48cbc7d` to `8bc468896ec7` (419 upstream commits), matching
+the upstream core baseline of the owned Windows DV build. Its minimum libplacebo
+API is 387, so advance libplacebo from `3330a515d621` to `9fabf6d5057c` (136 commits).
+Retain all other native/toolchain pins, especially FFmpeg 8.1.1, libdovi 3.3.2,
+the RPU/P010 patches and the published 0.1.12 wrapper API. Force both libplacebo
+reshaping and libdovi; fetch full libplacebo ancestry rather than relying on an
+aging 256-commit shallow bound for verification of `c93aa134`.
+
+Acceptance: the exact source workflow must compile the ARM64 stack and wrapper
+compatibility consumer, inspect all packaged ELFs and non-platform dependencies,
+verify both libdovi exports, and expose AAR/checksum/source-pin/inspection artifacts.
+Independently retrieve and inspect that AAR before application consumption. User
+device playback validation remains outside this library build stage. App version,
+signed release and APK verification belong to the subsequent mobile stage and
+final delivery; this library continues to use CI artifacts, not Maven/releases.
+
+Status: ACTIVE. Native build/artifact qualification remains outstanding.

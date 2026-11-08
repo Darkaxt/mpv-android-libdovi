@@ -30,9 +30,11 @@ v_ffmpeg=n8.1.1
 r_ffmpeg=239f2c733de417201d7ad3b3b8b0d9b63285b2b1
 v_libass=0.17.5
 r_libass=4a05d8127f525943ebf45fdc6497c9e665947f0d
-r_libplacebo=3330a515d62139259c26239014f286e233bd3a5c
+r_libplacebo=9fabf6d5057c40089afb020017c6347002b07308
 r_libplacebo_pink_fix=c93aa134ab62365ce1177efff99b8e1e66a818e7
-r_mpv=14f2d48cbc7dda61adb4bd181e107a1f3f76e533
+# Same upstream player baseline as the owned Windows DV runtime. Its minimum
+# libplacebo API is 387, so these two revisions advance together.
+r_mpv=8bc468896ec711cc5a3ac33dae9cbc0e266bcfa4
 
 # Host build tools required by the libdovi and current Meson projects.
 v_rust=1.98.1

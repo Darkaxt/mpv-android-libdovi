@@ -9,6 +9,10 @@ on:
 jobs:
   aar:
     runs-on: ubuntu-24.04
+    env:
+      cores: '2'
+      CARGO_BUILD_JOBS: '2'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
     steps:
       - uses: actions/checkout@v6
 
@@ -53,32 +57,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          aar=lib/build/outputs/aar/lib-release.aar
-          unzip -q "$aar" -d aar-inspect
-          for entry in \
-            classes.jar \
-            jni/arm64-v8a/libplayer.so \
-            jni/arm64-v8a/libmpv.so \
-            jni/arm64-v8a/libavcodec.so \
-            jni/arm64-v8a/libavdevice.so \
-            jni/arm64-v8a/libavfilter.so \
-            jni/arm64-v8a/libavformat.so \
-            jni/arm64-v8a/libavutil.so \
-            jni/arm64-v8a/libswresample.so \
-            jni/arm64-v8a/libswscale.so \
-            jni/arm64-v8a/libc++_shared.so; do
-            test -f "aar-inspect/$entry"
-          done
-          jar tf aar-inspect/classes.jar | grep -qx 'is/xyz/mpv/MPV.class'
-          jar tf aar-inspect/classes.jar | grep -qx 'is/xyz/mpv/MPVNode.class'
-          jar tf aar-inspect/classes.jar | grep -qx 'is/xyz/mpv/BaseMPVView.class'
-          readelf -h aar-inspect/jni/arm64-v8a/libmpv.so | grep -q 'Machine:.*AArch64'
-          strings aar-inspect/jni/arm64-v8a/libmpv.so | grep -qx 'dovi_parse_rpu'
           mkdir -p dist
-          cp "$aar" dist/mpv-android-libdovi-arm64.aar
+          python3 buildscripts/include/inspect-aar.py lib/build/outputs/aar/lib-release.aar \
+            --extract-dir aar-inspect > dist/native-manifest.json
+          cp lib/build/outputs/aar/lib-release.aar dist/mpv-android-libdovi-arm64.aar
+          cp buildscripts/include/depinfo.sh dist/native-pins.sh
+          cd dist
+          sha256sum mpv-android-libdovi-arm64.aar > SHA256SUMS
 
       - uses: actions/upload-artifact@v7
         with:
           name: mpv-android-libdovi-arm64
-          path: dist/mpv-android-libdovi-arm64.aar
+          path: dist/*
           if-no-files-found: error

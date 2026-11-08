@@ -18,10 +18,18 @@ It combines two independent player improvements:
    This issue is not Dolby Vision-specific.
 
 The AAR exposes the `is.xyz.mpv.MPV`, `MPVNode`, and `BaseMPVView` API used by
-`io.github.abdallahmehiz:mpv-android-lib:0.1.12`, so Nuvio can be evaluated
-against it without replacing its libmpv player architecture.
+`io.github.abdallahmehiz:mpv-android-lib:0.1.12`, so NuvioDV can consume native
+updates without replacing its libmpv player architecture.
 
 ## Status and limitations
+
+The current update targets mpv `8bc468896e` (the same upstream player baseline
+as the owned Windows DV build) and libplacebo `9fabf6d505` / API 387. They advance
+together because this mpv revision requires that newer libplacebo API. FFmpeg
+8.1.1, libdovi 3.3.2 and both MediaCodec patches remain pinned. The build explicitly
+requires libdovi and checks complete ancestry of the sync-object leak fix.
+The successful workflow and its artifact manifest determine the qualified build;
+editing these pins alone is not a verified AAR or an application update.
 
 - Experimental and ARM64-only.
 - Compile compatibility is checked in CI and against the NuvioMobile Android
@@ -36,6 +44,9 @@ against it without replacing its libmpv player architecture.
 Every successful [Build ARM64 AAR workflow](https://github.com/Darkaxt/mpv-android-libdovi/actions/workflows/build.yml)
 uploads `mpv-android-libdovi-arm64.aar` as a workflow artifact. This fork does
 not publish Maven packages or GitHub Releases.
+The artifact also carries SHA-256 checksums, the native source/toolchain pins and
+an inspection manifest covering every ELF's architecture, dependency closure,
+required libdovi exports and compatible wrapper classes.
 
 Copy the downloaded AAR into the consuming app's `libs/` directory and use a
 local file dependency:

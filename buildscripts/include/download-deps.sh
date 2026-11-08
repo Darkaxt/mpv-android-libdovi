@@ -108,7 +108,9 @@ fi
 
 # libplacebo
 clone_revision https://github.com/haasn/libplacebo libplacebo "$r_libplacebo" "$r_libplacebo"
-git -C libplacebo fetch --quiet --depth=256 origin "$r_libplacebo"
+if [ "$(git -C libplacebo rev-parse --is-shallow-repository)" = true ]; then
+	git -C libplacebo fetch --quiet --unshallow origin "$r_libplacebo"
+fi
 if ! git -C libplacebo merge-base --is-ancestor \
 	"$r_libplacebo_pink_fix" "$r_libplacebo"; then
 	echo "Pinned libplacebo revision does not contain the required pink-screen fix" >&2

@@ -83,4 +83,13 @@ device playback validation remains outside this library build stage. App version
 signed release and APK verification belong to the subsequent mobile stage and
 final delivery; this library continues to use CI artifacts, not Maven/releases.
 
-Status: ACTIVE. Native build/artifact qualification remains outstanding.
+Status: COMPLETE. Run `42532012258` succeeded at source
+`84c7e40cb83ba66918edf4ce811b4a177b742c79`, including the 0.1.12 compatibility
+consumer. Independently downloaded AAR SHA-256:
+`e8f5e4063a2db82a78c84350d8170ec7951a301488248b82b1bae9a4779bf02a`.
+Independent readelf inspection matches the CI manifest for every ELF's ARM64
+architecture, dependency closure and library hash, plus both required libdovi
+exports and wrapper classes. The unchanged libavcodec hash also matches the
+previous qualified patched artifact. R1-R7 pass; no library-stage blocker or
+tracked deferral remains. Device playback is not claimed. App integration and
+signed delivery remain in their named subsequent stages.

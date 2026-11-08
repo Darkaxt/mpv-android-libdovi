@@ -10,9 +10,9 @@ a general mpv-android distribution.
 
 It combines two independent player improvements:
 
-1. **Better Dolby Vision handling.** libdovi 3.3.2 is linked into libplacebo
-   and FFmpeg, with MediaCodec patches that preserve Dolby Vision RPU metadata
-   and support P010 byte-buffer output.
+1. **Better Dolby Vision handling.** libdovi 3.3.2 is linked into libplacebo.
+   The FFmpeg MediaCodec patches use FFmpeg's own Dolby Vision parser to preserve
+   RPU metadata on decoded frames and add P010 byte-buffer output.
 2. **The long-play pink/purple video failure.** The pinned libplacebo revision
    contains upstream fix `c93aa134`, which closes leaked OpenGL sync objects.
    This issue is not Dolby Vision-specific.
@@ -30,6 +30,12 @@ together because this mpv revision requires that newer libplacebo API. FFmpeg
 requires libdovi and checks complete ancestry of the sync-object leak fix.
 The successful workflow and its artifact manifest determine the qualified build;
 editing these pins alone is not a verified AAR or an application update.
+
+Qualified build: [run 42532012258](https://github.com/Darkaxt/mpv-android-libdovi/actions/runs/42532012258),
+source `84c7e40cb83ba66918edf4ce811b4a177b742c79`. Its independently inspected AAR
+has SHA-256 `e8f5e4063a2db82a78c84350d8170ec7951a301488248b82b1bae9a4779bf02a`.
+Native compilation, the wrapper compatibility consumer and ELF inspection pass.
+Application promotion is a separate NuvioMobileDV release step.
 
 - Experimental and ARM64-only.
 - Compile compatibility is checked in CI and against the NuvioMobile Android
